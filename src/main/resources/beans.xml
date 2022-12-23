@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--跟标签beans，里面有很多的子标签bean，每一个bean子标签都代表一个类的配置-->
+<beans>
+    <!--通过class全类名来找到要框架来实例化的类-->
+    <!--id作为外部获取bean的依据-->
+    <bean id="accountDao" class="org.malred.edu.dao.impl.JdbcAccountDaoImpl">
+        <property name="ConnectionUtils" ref="connectionUtils"></property>
+    </bean>
+    <bean id="transferService" class="org.malred.edu.service.impl.TransferServiceImpl">
+        <!--通过添加标签来让框架帮忙注入属性,name是属性名,ref是对应的bean的id-->
+        <!--通过set+name锁定set方法,通过反射来调用set方法传值-->
+        <property name="AccountDao" ref="accountDao"></property>
+        <property name="TransactionManager" ref="transactionManager"></property>
+    </bean>
+    <bean id="connectionUtils" class="org.malred.edu.utils.ConnectionUtils"></bean>
+    <bean id="transactionManager" class="org.malred.edu.utils.TransactionManager">
+        <property name="ConnectionUtils" ref="connectionUtils"></property>
+    </bean>
+    <bean id="proxyFactory" class="org.malred.edu.factory.ProxyFactory">
+        <property name="TransactionManager" ref="transactionManager"></property>
+    </bean>
+</beans>
